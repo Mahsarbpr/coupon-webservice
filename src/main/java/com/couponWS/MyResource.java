@@ -34,7 +34,6 @@ import db.DB;
  */
 @Path("myresource")
 public class MyResource {
-
     /**
      * Method handling HTTP GET requests. The returned object will be sent
      * to the client as "text/plain" media type.
@@ -133,7 +132,7 @@ public void CreateCouponID(@FormParam("var") String CouponID){
    // @POST
     @GET
 	@Path("readcoupon/{ID}")
-    @Produces({MediaType.TEXT_XML, MediaType.APPLICATION_JSON})   
+    @Produces(MediaType.APPLICATION_JSON)   
   //  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Coupon ReadCoupon(@PathParam ("ID") String id){
     	Coupon co=new Coupon();	
@@ -146,16 +145,10 @@ public void CreateCouponID(@FormParam("var") String CouponID){
     		Connection c= database.connect();
 			stmt = (Statement) c.createStatement();
 //			String query = "SELECT Promotion FROM coupon where id="+IC;
-			rs = (ResultSet) stmt.executeQuery("SELECT discount , type from coupon where id="+IC);
+			rs = (ResultSet) stmt.executeQuery("SELECT DISTINCT discount , type from coupon where id="+IC);
 			while (rs.next()) {
 				co.Discount = rs.getDouble("discount");
 				co.CouponType = rs.getInt("type");
-				//return co;
-				//System.out.println("The discount is "+ discount+ "type is"+ type);
-//				String firstName = rs.getString("first_name");
-//				String lastName = rs.getString("last_name");
-//				System.out.println("ID: " + id + ", First Name: " + firstName
-//						+ ", Last Name: " + lastName);
 			}
 			
 		} catch (SQLException e) {
@@ -178,7 +171,6 @@ public Coupon Check2(){
 	try {
 		
 		Connection c= database.connect();
-		System.out.println("Pleeaseeeeee!!!!!!!!!!");
 		stmt = (Statement) c.createStatement();
 		String query = "SELECT discount FROM coupon where id="+IC;
 		rs = (ResultSet) stmt.executeQuery("SELECT discount , type from coupon where id="+IC);
