@@ -13,15 +13,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.mysql.jdbc.PreparedStatement;
@@ -45,13 +48,96 @@ public class MyResource {
 	    public String getIt() {
 	        return "Got it!";
 	    }
-@POST
-@Path("CreateCouponID")
-@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public void CreateCouponID(@FormParam("var") String CouponID){
-	if(CouponID != null && CouponID!=""){
-		int ci=Integer.parseInt(CouponID);
-	//	System.out.println(ci);
+
+	 /////////////////////////////////////////////////////////////////////
+	 @PUT
+	 @Path("UpdateCoupon")
+	 @Produces(MediaType.TEXT_HTML)
+	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	 public void UpdateCoupon(@FormParam("UvarID") String CouponID, @FormParam("Uvardiscount") String Discount,
+				@FormParam("Uvartype") String CouponType,@FormParam("UvarItmnm") String Itemname,@FormParam("UvarItmid") String ItemID, @FormParam("Uvartime1") String ValidTime1, @FormParam("Uvartime2") String ValidTime2){
+		 if(CouponID != null && CouponID !="" && Discount != null && Discount !="" && CouponType != null && CouponType !="" && Itemname != null && Itemname !="" && ItemID != null && ItemID !="" && ValidTime1 != null && ValidTime1 !="" && ValidTime2 != null && ValidTime2 !="" )
+			{			
+			int is1=Integer.parseInt(CouponID);
+			Double ds2=Double.parseDouble(Discount);
+			int is3=Integer.parseInt(CouponType);
+			int is5=Integer.parseInt(ItemID);
+
+			Date datevar=null;
+			Date datevarp=null;
+			java.sql.Date datevar1=null;
+			java.sql.Date datevar2=null;
+			
+			try {
+//				System.out.println(datevar+"this this this");
+				datevar = new SimpleDateFormat("yyyy-MM-dd").parse(ValidTime1);
+				datevarp=new SimpleDateFormat("yyyy-MM-dd").parse(ValidTime2);
+				datevar1 = new java.sql.Date(datevar.getTime());
+				datevar2 = new java.sql.Date(datevarp.getTime());
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+			//	System.out.println("date date date error");
+				e1.printStackTrace();
+			}
+			System.out.println("Before Inserting to Database");
+			Coupon C= new Coupon();
+			PreparedStatement stmt = null;
+	    	DB database = new DB();
+	    	try {
+	    		Connection c= database.connect();
+				String query = "UPDATE coupon SET discount=?, type=?, Iname=?, IID=?, time1=?, time2=? WHERE ID=?";
+				stmt = (PreparedStatement)c.prepareStatement(query);
+				stmt.setDouble(1, ds2);
+				stmt.setInt(2, is3);
+				stmt.setString(3, Itemname);
+				stmt.setInt(4, is5);
+				stmt.setDate(5, datevar1);
+				stmt.setDate(6,datevar2);
+				stmt.setInt(7, is1);
+				//System.out.println("agha agha tamum sho dge");
+				stmt.executeUpdate();
+//				System.out.println("Inserted to Database");
+				//stmt.close();
+	    	}
+	    	catch(SQLException e)
+	    	{
+	    		e.printStackTrace();
+	    	}
+		 
+			}		 
+	 }
+//////////////////////////////////////////////////////////////////////////
+	 @DELETE
+	 @Path("DeleteCoupon/{ID}")
+	 @Consumes(MediaType.APPLICATION_JSON)
+	 @Produces(MediaType.APPLICATION_JSON)
+	 public Response DeleteCoupon(@PathParam("ID") String id){//(@FormParam("DelVar") String CouponID){	
+		 int ci=Integer.parseInt(id);
+		System.out.println("here is the id for deleting: "+id);		
+		 PreparedStatement stmt = null;
+		    	DB database = new DB();
+		    	try {
+		    		Connection c= database.connect();
+					String query = "DELETE FROM coupon WHERE ID=?";
+					stmt = (PreparedStatement)c.prepareStatement(query);
+					stmt.setInt(1, ci);
+					stmt.executeUpdate();
+		    	}
+		    	catch(SQLException e)
+		    	{
+		    		e.printStackTrace();
+		    		System.out.println("sql erroooooor");
+		    	} 
+	 return Response.ok().build();
+	 }
+	 ///////////////////////////////////////////////////////////////////
+	 @POST
+	 @Path("CreateCouponID")
+	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	 public void CreateCouponID(@FormParam("var") String CouponID){
+		 if(CouponID != null && CouponID!=""){
+			 int ci=Integer.parseInt(CouponID);
+		System.out.println(ci);
 		PreparedStatement stmt = null;
     	DB database = new DB();
     	try {

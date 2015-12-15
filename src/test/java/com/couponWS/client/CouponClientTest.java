@@ -58,4 +58,9 @@ public class CouponClientTest {
 		assertNotNull(c);
 		//fail("Not yet implemented");
 	}
+	@Test
+	public void testDeleteCoupon(){
+		CouponClient client=new CouponClient();
+		client.Delete("51");
+	}
 }

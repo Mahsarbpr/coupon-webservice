@@ -8,6 +8,8 @@ import javax.ws.rs.client.ClientBuilder;
 import Coupon.Coupon;
 //import couponModel.GenericType;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 public class CouponClient {
 private Client client;
@@ -42,5 +44,12 @@ public List<Coupon> FindCouponByTypeC(String SID){
 	//int IID=Integer.parseInt(SID);
 	List<Coupon> cc=client.target("http://localhost:8080/coupon-webservice/webapi/myresource/FindCouponsByType").queryParam("var2",SID).request().get(new GenericType<List<Coupon>>(){});
 	return cc;
+}
+public void Delete(String SID){
+	//int IID=Integer.parseInt(SID);
+	Response response= client.target("http://localhost:8080/coupon-webservice/webapi/myresource/DeleteCoupon").path(SID).request(MediaType.APPLICATION_JSON).delete();
+	if(response.getStatus()!=200){
+		throw new RuntimeException(response.getStatus()+": there was an error on the server.");
+	}
 }
 }
