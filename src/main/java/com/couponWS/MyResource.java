@@ -48,9 +48,70 @@ public class MyResource {
 	    public String getIt() {
 	        return "Got it!";
 	    }
+@PUT
+@Path("{id}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response UpdateCoupon(Coupon c){
+	ResultSet rs = null;
+	PreparedStatement stmt = null;
+	DB database = new DB();
+	PreparedStatement stmt2 = null;
+	PreparedStatement stmt3 = null;
 
+	try {
+		Connection con= database.connect();
+		String query = "SELECT * from coupon WHERE ID=?";
+		stmt = (PreparedStatement)con.prepareStatement(query);
+		//stmt.setDouble(1, ds2);
+		//stmt.setInt(2, is3);
+		//stmt.setString(3, Itemname);
+		//stmt.setInt(4, is5);
+		//stmt.setDate(5, datevar1);
+		//stmt.setDate(6,datevar2);
+		stmt.setInt(1, c.getCouponID());
+		//System.out.println("agha agha tamum sho dge");
+		rs=(ResultSet)stmt.executeQuery();
+//		System.out.println("Inserted to Database");
+		//stmt.close();
+		if(rs==null){
+			String queryI = "INSERT INTO coupon (ID, discount, type, Iname, IID, time1, time2) Values (?,?,?,?,?,?,?)";
+			stmt2 = (PreparedStatement)con.prepareStatement(queryI);
+			stmt2.setInt(1, c.getCouponID());
+			stmt2.setDouble(2, c.getDiscount());
+			stmt2.setInt(3, c.getCouponType());
+			stmt2.setString(4, c.getItemname());
+			stmt2.setInt(5, c.getItemID());
+			stmt2.setDate(6, (java.sql.Date) c.getValidTime1());
+			stmt2.setDate(7,(java.sql.Date) c.getValidTime2());
+			//System.out.println("agha agha tamum sho dge");
+			stmt2.executeUpdate();
+		}
+		else{
+			String queryU = "UPDATE coupon SET discount=?, type=?, Iname=?, IID=?, time1=?, time2=? WHERE ID=?";
+			stmt3 = (PreparedStatement)con.prepareStatement(queryU);
+			stmt3.setDouble(1, c.getDiscount());
+			stmt3.setInt(2, c.getCouponType());
+			stmt3.setString(3, c.getItemname());
+			stmt3.setInt(4, c.getItemID());
+			stmt3.setDate(5, (java.sql.Date) c.getValidTime1());
+			stmt3.setDate(6, (java.sql.Date) c.getValidTime2());
+			stmt3.setInt(7, c.getCouponID());
+			//System.out.println("agha agha tamum sho dge");
+			stmt3.executeUpdate();
+		}
+			
+	}
+	catch(SQLException e)
+	{
+		e.printStackTrace();
+	}
+
+	
+	return Response.ok().entity(c).build();
+}
 	 /////////////////////////////////////////////////////////////////////
-	 @PUT
+	/*@PUT
 	 @Path("UpdateCoupon")
 	 @Produces(MediaType.TEXT_HTML)
 	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -105,7 +166,7 @@ public class MyResource {
 	    	}
 		 
 			}		 
-	 }
+	 } */ 
 //////////////////////////////////////////////////////////////////////////
 	 @DELETE
 	 @Path("DeleteCoupon/{ID}")
@@ -537,11 +598,11 @@ public List<Coupon> Checkcoupons3(@QueryParam("var2") String var2){
 	System.out.print(datevar1);
 	try {
 		c=database.connect();
-		String sql="SELECT ID , discount , type , Iname , time1 , time2 from coupon where coupon.time1 <= ? and coupon.time2 >=? and coupon.disount=? and coupon.type=?";
+		String sql="SELECT ID , discount , type , Iname , time1 , time2 from coupon where coupon.time1 <= ? and coupon.time2 >=? and coupon.type=?";
 		stmt = (PreparedStatement) c.prepareStatement(sql);
 		stmt.setDate(1, datevar1);
 		stmt.setDate(2, datevar1);
-		stmt.setInt(4, ty);
+		stmt.setInt(3, ty);
 		if(stmt.executeQuery()!=null)
 		{
 			rs=stmt.executeQuery();

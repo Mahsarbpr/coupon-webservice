@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 
 import Coupon.Coupon;
 //import couponModel.GenericType;
@@ -51,5 +52,12 @@ public void Delete(String SID){
 	if(response.getStatus()!=200){
 		throw new RuntimeException(response.getStatus()+": there was an error on the server.");
 	}
+}
+public Coupon Update(Coupon c){
+	Response response=  client.target("http://localhost:8080/coupon-webservice/webapi/myresource/").path("c.getCouponID()").request(MediaType.APPLICATION_JSON).put(Entity.entity(c, MediaType.APPLICATION_JSON));
+	if(response.getStatus()!=200){
+		throw new RuntimeException(response.getStatus()+": there was an error on the server.");
+	}
+	return response.readEntity(Coupon.class);
 }
 }
