@@ -1,6 +1,6 @@
 package com.couponWS;
-
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,126 +48,69 @@ public class MyResource {
 	    public String getIt() {
 	        return "Got it!";
 	    }
-@PUT
-@Path("{id}")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public Response UpdateCoupon(Coupon c){
-	ResultSet rs = null;
-	PreparedStatement stmt = null;
-	DB database = new DB();
-	PreparedStatement stmt2 = null;
-	PreparedStatement stmt3 = null;
+//Updates a coupon
+	 @PUT
+	 @Path("{id}")
+	 @Consumes(MediaType.APPLICATION_JSON)
+	 @Produces(MediaType.APPLICATION_JSON)
 
-	try {
-		Connection con= database.connect();
-		String query = "SELECT * from coupon WHERE ID=?";
-		stmt = (PreparedStatement)con.prepareStatement(query);
-		//stmt.setDouble(1, ds2);
-		//stmt.setInt(2, is3);
-		//stmt.setString(3, Itemname);
-		//stmt.setInt(4, is5);
-		//stmt.setDate(5, datevar1);
-		//stmt.setDate(6,datevar2);
-		stmt.setInt(1, c.getCouponID());
-		//System.out.println("agha agha tamum sho dge");
-		rs=(ResultSet)stmt.executeQuery();
-//		System.out.println("Inserted to Database");
-		//stmt.close();
-		if(rs==null){
-			String queryI = "INSERT INTO coupon (ID, discount, type, Iname, IID, time1, time2) Values (?,?,?,?,?,?,?)";
-			stmt2 = (PreparedStatement)con.prepareStatement(queryI);
-			stmt2.setInt(1, c.getCouponID());
-			stmt2.setDouble(2, c.getDiscount());
-			stmt2.setInt(3, c.getCouponType());
-			stmt2.setString(4, c.getItemname());
-			stmt2.setInt(5, c.getItemID());
-			stmt2.setDate(6, (java.sql.Date) c.getValidTime1());
-			stmt2.setDate(7,(java.sql.Date) c.getValidTime2());
-			//System.out.println("agha agha tamum sho dge");
-			stmt2.executeUpdate();
-		}
-		else{
-			String queryU = "UPDATE coupon SET discount=?, type=?, Iname=?, IID=?, time1=?, time2=? WHERE ID=?";
-			stmt3 = (PreparedStatement)con.prepareStatement(queryU);
-			stmt3.setDouble(1, c.getDiscount());
-			stmt3.setInt(2, c.getCouponType());
-			stmt3.setString(3, c.getItemname());
-			stmt3.setInt(4, c.getItemID());
-			stmt3.setDate(5, (java.sql.Date) c.getValidTime1());
-			stmt3.setDate(6, (java.sql.Date) c.getValidTime2());
-			stmt3.setInt(7, c.getCouponID());
-			//System.out.println("agha agha tamum sho dge");
-			stmt3.executeUpdate();
-		}
-			
-	}
-	catch(SQLException e)
-	{
-		e.printStackTrace();
-	}
 
-	
-	return Response.ok().entity(c).build();
-}
-	 /////////////////////////////////////////////////////////////////////
-	/*@PUT
-	 @Path("UpdateCoupon")
-	 @Produces(MediaType.TEXT_HTML)
-	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	 public void UpdateCoupon(@FormParam("UvarID") String CouponID, @FormParam("Uvardiscount") String Discount,
-				@FormParam("Uvartype") String CouponType,@FormParam("UvarItmnm") String Itemname,@FormParam("UvarItmid") String ItemID, @FormParam("Uvartime1") String ValidTime1, @FormParam("Uvartime2") String ValidTime2){
-		 if(CouponID != null && CouponID !="" && Discount != null && Discount !="" && CouponType != null && CouponType !="" && Itemname != null && Itemname !="" && ItemID != null && ItemID !="" && ValidTime1 != null && ValidTime1 !="" && ValidTime2 != null && ValidTime2 !="" )
-			{			
-			int is1=Integer.parseInt(CouponID);
-			Double ds2=Double.parseDouble(Discount);
-			int is3=Integer.parseInt(CouponType);
-			int is5=Integer.parseInt(ItemID);
+	 public Response UpdateCoupon(Coupon c){
+		 ResultSet rs = null;
+		 PreparedStatement stmt = null;
+		 DB database = new DB();
+		 PreparedStatement stmt2 = null;
+		 PreparedStatement stmt3 = null;
 
-			Date datevar=null;
-			Date datevarp=null;
-			java.sql.Date datevar1=null;
-			java.sql.Date datevar2=null;
-			
-			try {
-//				System.out.println(datevar+"this this this");
-				datevar = new SimpleDateFormat("yyyy-MM-dd").parse(ValidTime1);
-				datevarp=new SimpleDateFormat("yyyy-MM-dd").parse(ValidTime2);
-				datevar1 = new java.sql.Date(datevar.getTime());
-				datevar2 = new java.sql.Date(datevarp.getTime());
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-			//	System.out.println("date date date error");
-				e1.printStackTrace();
-			}
-			System.out.println("Before Inserting to Database");
-			Coupon C= new Coupon();
-			PreparedStatement stmt = null;
-	    	DB database = new DB();
-	    	try {
-	    		Connection c= database.connect();
-				String query = "UPDATE coupon SET discount=?, type=?, Iname=?, IID=?, time1=?, time2=? WHERE ID=?";
-				stmt = (PreparedStatement)c.prepareStatement(query);
-				stmt.setDouble(1, ds2);
-				stmt.setInt(2, is3);
-				stmt.setString(3, Itemname);
-				stmt.setInt(4, is5);
-				stmt.setDate(5, datevar1);
-				stmt.setDate(6,datevar2);
-				stmt.setInt(7, is1);
-				//System.out.println("agha agha tamum sho dge");
-				stmt.executeUpdate();
-//				System.out.println("Inserted to Database");
-				//stmt.close();
-	    	}
-	    	catch(SQLException e)
-	    	{
-	    		e.printStackTrace();
-	    	}
-		 
-			}		 
-	 } */ 
-//////////////////////////////////////////////////////////////////////////
+		 try {
+			 Connection con= database.connect();
+			 String query = "SELECT * from coupon WHERE ID=?";
+			 stmt = (PreparedStatement)con.prepareStatement(query);
+			 //stmt.setDouble(1, ds2);
+			 //stmt.setInt(2, is3);
+			 //stmt.setString(3, Itemname);
+			 //stmt.setInt(4, is5);
+			 //stmt.setDate(5, datevar1);
+			 //stmt.setDate(6,datevar2);
+			 stmt.setInt(1, c.getCouponID());
+			 //System.out.println("agha agha tamum sho dge");
+			 rs=(ResultSet)stmt.executeQuery();
+			 //		System.out.println("Inserted to Database");
+			 //stmt.close();
+			 if(rs==null){
+				 String queryI = "INSERT INTO coupon (ID, discount, type, Iname, IID, time1, time2) Values (?,?,?,?,?,?,?)";
+				 stmt2 = (PreparedStatement)con.prepareStatement(queryI);
+				 stmt2.setInt(1, c.getCouponID());
+				 stmt2.setDouble(2, c.getDiscount());
+				 stmt2.setInt(3, c.getCouponType());
+				 stmt2.setString(4, c.getItemname());
+				 stmt2.setInt(5, c.getItemID());
+				 stmt2.setDate(6, (java.sql.Date) c.getValidTime1());
+				 stmt2.setDate(7,(java.sql.Date) c.getValidTime2());
+				 //System.out.println("agha agha tamum sho dge");
+				 stmt2.executeUpdate();
+			 }
+			 else{
+				 String queryU = "UPDATE coupon SET discount=?, type=?, Iname=?, IID=?, time1=?, time2=? WHERE ID=?";
+				 stmt3 = (PreparedStatement)con.prepareStatement(queryU);
+				 stmt3.setDouble(1, c.getDiscount());
+				 stmt3.setInt(2, c.getCouponType());
+				 stmt3.setString(3, c.getItemname());
+				 stmt3.setInt(4, c.getItemID());
+				 stmt3.setDate(5, (java.sql.Date) c.getValidTime1());
+				 stmt3.setDate(6, (java.sql.Date) c.getValidTime2());
+				 stmt3.setInt(7, c.getCouponID());
+				 //System.out.println("agha agha tamum sho dge");
+				 stmt3.executeUpdate();
+			 }
+		 }
+		 catch(SQLException e)
+		 {
+			 e.printStackTrace();
+		 }
+		 return Response.ok().entity(c).build();
+	 }
+//Deletes a coupon
 	 @DELETE
 	 @Path("DeleteCoupon/{ID}")
 	 @Consumes(MediaType.APPLICATION_JSON)
@@ -191,15 +134,15 @@ public Response UpdateCoupon(Coupon c){
 		    	} 
 	 return Response.ok().build();
 	 }
-	 ///////////////////////////////////////////////////////////////////
-	 @POST
-	 @Path("CreateCouponID")
-	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	 public void CreateCouponID(@FormParam("var") String CouponID){
-		 if(CouponID != null && CouponID!=""){
-			 int ci=Integer.parseInt(CouponID);
-		System.out.println(ci);
-		PreparedStatement stmt = null;
+//Upload a coupon file
+/*	 @POST
+	 @Path("UploadCouponFile")
+	 @Consumes(MediaType.MULTIPART_FORM_DATA)
+	 public void UploadCouponFile(@FormParam("file") InputStream uploadedInputStream){
+	//	 if(CouponID != null && CouponID!=""){
+		//	 int ci=Integer.parseInt(CouponID);
+		//System.out.println(ci);
+	/*	PreparedStatement stmt = null;
     	DB database = new DB();
     	try {
     		Connection c= database.connect();
@@ -215,14 +158,15 @@ public Response UpdateCoupon(Coupon c){
 	}
 	else
 		System.out.println("there is null input");
-	
 }
-	
+	*/
+ 
+//Adds a single coupon	
 	@POST
 	@Path("CreateCoupon")
 	@Produces(MediaType.TEXT_HTML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void CreateCoupon(@FormParam("varID") String CouponID, @FormParam("vardiscount") String Discount,
+	 public void CreateCoupon(@FormParam("varID") String CouponID, @FormParam("vardiscount") String Discount,
 			@FormParam("vartype") String CouponType,@FormParam("varItmnm") String Itemname,@FormParam("varItmid") String ItemID, @FormParam("vartime1") String ValidTime1, @FormParam("vartime2") String ValidTime2) 
 	{
 		if(CouponID != null && CouponID !="" && Discount != null && Discount !="" && CouponType != null && CouponType !="" && Itemname != null && Itemname !="" && ItemID != null && ItemID !="" && ValidTime1 != null && ValidTime1 !="" && ValidTime2 != null && ValidTime2 !="" )
@@ -238,17 +182,14 @@ public Response UpdateCoupon(Coupon c){
 		java.sql.Date datevar2=null;
 		
 		try {
-//			System.out.println(datevar+"this this this");
 			datevar = new SimpleDateFormat("yyyy-MM-dd").parse(ValidTime1);
 			datevarp=new SimpleDateFormat("yyyy-MM-dd").parse(ValidTime2);
 			datevar1 = new java.sql.Date(datevar.getTime());
 			datevar2 = new java.sql.Date(datevarp.getTime());
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
-		//	System.out.println("date date date error");
 			e1.printStackTrace();
 		}
-		System.out.println("Before Inserting to Database");
 		Coupon C= new Coupon();
 		PreparedStatement stmt = null;
     	DB database = new DB();
@@ -263,9 +204,7 @@ public Response UpdateCoupon(Coupon c){
 			stmt.setInt(5, is5);
 			stmt.setDate(6, datevar1);
 			stmt.setDate(7,datevar2);
-			//System.out.println("agha agha tamum sho dge");
 			stmt.executeUpdate();
-//			System.out.println("Inserted to Database");
 			//stmt.close();
     	}
     	catch(SQLException e)
@@ -274,9 +213,7 @@ public Response UpdateCoupon(Coupon c){
     	}
     	} 
 	}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-   // @POST
+//Read coupon information, type and discount
     @GET
 	@Path("readcoupon/{ID}")
     @Produces(MediaType.APPLICATION_JSON)   
@@ -285,6 +222,7 @@ public Response UpdateCoupon(Coupon c){
     	Coupon co=new Coupon();	
     	Statement stmt = null;
 		ResultSet rs = null;
+		Date d= new Date();
     	DB database = new DB();
     	int IC=Integer.parseInt(id);
     	co.CouponID=IC;
@@ -292,23 +230,27 @@ public Response UpdateCoupon(Coupon c){
     		Connection c= database.connect();
 			stmt = (Statement) c.createStatement();
 //			String query = "SELECT Promotion FROM coupon where id="+IC;
-			rs = (ResultSet) stmt.executeQuery("SELECT DISTINCT discount , type from coupon where id="+IC);
-			while (rs.next()) {
+			rs = (ResultSet) stmt.executeQuery("SELECT discount , type from coupon where id="+IC);
+			/*while (rs.next()) {
 				co.Discount = rs.getDouble("discount");
 				co.CouponType = rs.getInt("type");
-			}
-			
+				co.Itemname ="";
+				co.ItemID=0;
+				co.ValidTime1=d;
+				co.ValidTime2=d;
+						}
+			*/
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return co;
     	}
-//////////////////////////////////////////////////////////////////////////////
+//First simple rest service I developed 
 @GET
 @Produces({MediaType.TEXT_XML, MediaType.APPLICATION_JSON})
 @Path("get")
-public Coupon Check2(){
+	public Coupon Check2(){
 	Statement stmt = null;
 	ResultSet rs = null;
 	DB database = new DB();
@@ -334,12 +276,11 @@ public Coupon Check2(){
 	
 	return C2;
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////
+//Reads Coupon discount amount for price computation
 @GET
 @Produces(MediaType.APPLICATION_JSON)//{MediaType.TEXT_XML,
 @Path("get/{var}")
-public Coupon Check3(@PathParam("var") int var ){
+	public Coupon Check3(@PathParam("var") int var ){
 	Statement stmt = null;
 	ResultSet rs = null;
 	DB database = new DB();
@@ -364,41 +305,7 @@ public Coupon Check3(@PathParam("var") int var ){
 	
 	return C2;
 }
-///////////////////////////////////////////////////////////////////////////////////////
-//this get is used in computing price and finding available coupons for an item in avaliable coupons
-/*@GET
-@Consumes(MediaType.TEXT_PLAIN)
-@Produces(MediaType.APPLICATION_JSON)
-@Path("FindCouponForItem")
-public List<Coupon> Check4(@QueryParam("var") String var ){
-	Statement stmt = null;
-	ResultSet rs = null;
-	DB database = new DB();
-	List<Coupon> Cl = new ArrayList<Coupon>();
-	try {
-		Connection c= database.connect();
-		stmt = (Statement) c.createStatement();
-		//String query = "SELECT Promotion FROM coupon where id="+IC;
-		rs = (ResultSet) stmt.executeQuery("SELECT DISTNICT ID , discount , type from coupon where Iname="+var);
-		while (rs.next()) {
-			Coupon C2 = new Coupon();
-			C2.CouponID=rs.getInt("ID");
-			C2.Discount = rs.getDouble("discount");
-			C2.CouponType =rs.getInt("type");
-			C2.ValidTime1=rs.getDate("time1");
-			C2.ValidTime2=rs.getDate("time2");
-			Cl.add(C2);
-		}
-		//return Cl;
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	return Cl;
-}
-*/
-////////////////////////////////////////////////////////////////////////////////
+//Reads Coupon information discount, start and end time, for validation check
 @GET
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
@@ -429,7 +336,7 @@ public Coupon Checktime(@QueryParam("var") int var ){
 	}
 	return C2;
 }
-///////////////////////////////////////////////////////////////////////////////
+//for checking
 @GET
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
@@ -446,7 +353,8 @@ public Coupon Checkcoupons(@QueryParam("var1") int var1){
 		stmt = (Statement) c.createStatement();
 		//String query = "SELECT Promotion FROM coupon where id="+IC;
 		rs = (ResultSet) stmt.executeQuery("SELECT DISTINCT discount , Iname , time1 , time2 from coupon where id="+var1);
-		while (rs.next()) {
+		if(rs.next())
+		while (rs.next()){
 			C2.Discount=rs.getDouble("discount");
 			C2.Itemname=rs.getString("Iname");
 			C2.setValidTime1(rs.getDate("time1"));
@@ -454,20 +362,22 @@ public Coupon Checkcoupons(@QueryParam("var1") int var1){
 			//C2.Discount = Double.parseDouble(rs.getString("discount"));
 			//C2.CouponType =Integer.parseInt(rs.getString("type"));
 			//return C2;
-		}	
+		}
+		else
+			return null;
+		
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	return C2;
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-//find available coupons for a specific time
+//finds available coupons for a specific time
 @GET
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("FindCouponByTime") //previous name getcoupons2
-public List<Coupon> Checkcoupons2(@QueryParam("var1") String var1){
+public String Checkcoupons2(@QueryParam("var1") String var1){
 	PreparedStatement stmt = null;
 	ResultSet rs = null;
 	DB database = new DB();
@@ -509,16 +419,15 @@ public List<Coupon> Checkcoupons2(@QueryParam("var1") String var1){
 			C2.add(Cpn);
 		}	
 		System.out.println(C2);
-			return C2;
+			return C2.toString();
 		}
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	return C2;
+	return C2.toString();
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-//this get is used in computing price and finding available coupons for an item in avaliable coupons
+//finds available coupons for specific item
 @GET
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
@@ -571,8 +480,7 @@ public List<Coupon> Checkcoupons4(@QueryParam("var") String var){
 	}
 	return C2;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
-//find available coupons of type 
+//finds specific type of coupons
 @GET
 @Consumes(MediaType.TEXT_PLAIN)
 @Produces(MediaType.APPLICATION_JSON)
@@ -585,8 +493,10 @@ public List<Coupon> Checkcoupons3(@QueryParam("var2") String var2){
 	List<Coupon> C2 = new ArrayList<Coupon>();
 	//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	int ty=Integer.parseInt(var2);
+	System.out.println(ty);
 	Date datevar=new Date();
 	java.sql.Date datevar1=null;
+	int i=0;
 	try {
 		System.out.println(datevar+"this this this");
 		datevar1 = new java.sql.Date(datevar.getTime());
@@ -606,6 +516,7 @@ public List<Coupon> Checkcoupons3(@QueryParam("var2") String var2){
 		if(stmt.executeQuery()!=null)
 		{
 			rs=stmt.executeQuery();
+			System.out.println("hi");
 			while (rs.next()) {
 			Coupon Cpn= new Coupon();
 			Cpn.setCouponID(rs.getInt("ID"));
@@ -614,6 +525,8 @@ public List<Coupon> Checkcoupons3(@QueryParam("var2") String var2){
 			Cpn.setItemname(rs.getString("Iname"));
 			Cpn.setValidTime1(rs.getDate("time1"));
 			Cpn.setValidTime2(rs.getDate("time2"));
+			System.out.println(Cpn);
+			System.out.println("hi");
 			C2.add(Cpn);
 		}	
 		return C2;
@@ -625,4 +538,3 @@ public List<Coupon> Checkcoupons3(@QueryParam("var2") String var2){
 	return C2;
 }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////

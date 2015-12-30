@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class CouponClientTest {
 		Coupon c=client.ReadCoupon("13");
 		System.out.println(c);
 		assertNotNull(c);
-		//fail("Not yet implemented");
 	}
 	@Test
 	public void testReadCoupon2() {
@@ -27,16 +27,23 @@ public class CouponClientTest {
 		Coupon c=client.ReadCoupon2("13");
 		System.out.println(c);
 		assertNotNull(c);
-		//fail("Not yet implemented");
 	}
-	@Test
+	/*@Test
 	public void testGetTime(){
 		CouponClient client=new CouponClient();
 		Coupon c=client.GetTime("13");
+		Coupon c2=new Coupon();
+		c2.setCouponID(13);
+		c2.setDiscount(0.3);
+		c2.setCouponType(1);
+		c2.setItemname("item3");
+		Date d1= new Date();
+		d1.setYear(2014);
+		c2.setValidTime1(format1);
 		System.out.println(c);
 		assertNotNull(c);
 		//fail("Not yet implemented");
-	}
+	}*/
 	@Test
 	public void testFindCouponByTime(){
 		CouponClient client=new CouponClient();
